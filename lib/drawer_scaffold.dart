@@ -16,7 +16,7 @@ class DrawerScaffold extends StatefulWidget {
   final Screen contentView;
   final ScreenBuilder builder;
 
-  final AppBar appBar;
+  final PreferredSizeWidget appBar;
   final Direction mainDrawer;
   final DrawerScaffoldController controller;
   final double cornerRadius;
@@ -84,14 +84,18 @@ class DrawerScaffold extends StatefulWidget {
 class _DrawerScaffoldState<T> extends State<DrawerScaffold>
     with TickerProviderStateMixin {
   List<MenuController> menuControllers;
+
   // Curve scaleDownCurve = new Interval(0.0, 0.3, curve: Curves.easeOut);
   // Curve scaleUpCurve = new Interval(0.0, 1.0, curve: Curves.easeOut);
   // Curve slideOutCurve = new Interval(0.0, 1.0, curve: Curves.easeOut);
   // Curve slideInCurve = new Interval(0.0, 1.0, curve: Curves.easeOut);
 
   Curve get scaleDownCurve => widget.drawers[focusDrawerIndex].scaleDownCurve;
+
   Curve get scaleUpCurve => widget.drawers[focusDrawerIndex].scaleUpCurve;
+
   Curve get slideOutCurve => widget.drawers[focusDrawerIndex].slideOutCurve;
+
   Curve get slideInCurve => widget.drawers[focusDrawerIndex].slideInCurve;
 
   int listenDrawerIndex = 0;
@@ -101,6 +105,7 @@ class _DrawerScaffoldState<T> extends State<DrawerScaffold>
       0,
       widget.drawers
           .indexWhere((element) => element.direction == widget.mainDrawer));
+
   @override
   void initState() {
     super.initState();
@@ -177,37 +182,38 @@ class _DrawerScaffoldState<T> extends State<DrawerScaffold>
   }
 
   Widget createAppBar() {
-    if (widget.appBar != null)
+    final aBar = widget.appBar;
+    if (aBar is AppBar)
       return AppBar(
-          actionsIconTheme: widget.appBar.actionsIconTheme,
-          excludeHeaderSemantics: widget.appBar.excludeHeaderSemantics,
-          shape: widget.appBar.shape,
-          key: widget.appBar.key,
-          backgroundColor: widget.appBar.backgroundColor,
-          leading: widget.appBar.leading ??
+          actionsIconTheme: aBar.actionsIconTheme,
+          excludeHeaderSemantics: aBar.excludeHeaderSemantics,
+          shape: aBar.shape,
+          key: aBar.key,
+          backgroundColor: aBar.backgroundColor,
+          leading: aBar.leading ??
               new IconButton(
                   icon: Icon(Icons.menu),
                   onPressed: () {
                     focusDrawerIndex = mainDrawerIndex;
                     menuControllers[mainDrawerIndex].toggle();
                   }),
-          toolbarHeight: widget.appBar.toolbarHeight,
-          title: widget.appBar.title,
-          automaticallyImplyLeading: widget.appBar.automaticallyImplyLeading,
-          actions: widget.appBar.actions,
-          flexibleSpace: widget.appBar.flexibleSpace,
-          bottom: widget.appBar.bottom,
-          elevation: widget.appBar.elevation,
-          brightness: widget.appBar.brightness,
-          iconTheme: widget.appBar.iconTheme,
-          textTheme: widget.appBar.textTheme,
-          primary: widget.appBar.primary,
-          centerTitle: widget.appBar.centerTitle,
-          titleSpacing: widget.appBar.titleSpacing,
-          toolbarOpacity: widget.appBar.toolbarOpacity,
-          bottomOpacity: widget.appBar.bottomOpacity);
-
-    return null;
+          toolbarHeight: aBar.toolbarHeight,
+          title: aBar.title,
+          automaticallyImplyLeading: aBar.automaticallyImplyLeading,
+          actions: aBar.actions,
+          flexibleSpace: aBar.flexibleSpace,
+          bottom: aBar.bottom,
+          elevation: aBar.elevation,
+          brightness: aBar.brightness,
+          iconTheme: aBar.iconTheme,
+          textTheme: aBar.textTheme,
+          primary: aBar.primary,
+          centerTitle: aBar.centerTitle,
+          titleSpacing: aBar.titleSpacing,
+          toolbarOpacity: aBar.toolbarOpacity,
+          bottomOpacity: aBar.bottomOpacity);
+    else
+      return aBar;
   }
 
   double startDx = 0.0;
@@ -217,6 +223,7 @@ class _DrawerScaffoldState<T> extends State<DrawerScaffold>
   Widget body;
 
   T selectedItemId;
+
   bool isDrawerOpen() {
     return menuControllers.where((element) => element.isOpen()).isNotEmpty;
   }
@@ -457,6 +464,7 @@ class _DrawerScaffoldState<T> extends State<DrawerScaffold>
 class DrawerScaffoldMenuController extends StatefulWidget {
   final DrawerScaffoldBuilder builder;
   final Direction direction;
+
   DrawerScaffoldMenuController({
     this.builder,
     this.direction,
@@ -618,6 +626,7 @@ class DrawerScaffoldController {
   DrawerScaffoldController({Direction open}) : _open = open;
 
   Direction _open;
+
   toggle([Direction direction = Direction.left]) {
     if (isOpen())
       closeDrawer(direction);
