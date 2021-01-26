@@ -191,6 +191,7 @@ class _DrawerScaffoldState<T> extends State<DrawerScaffold>
                     focusDrawerIndex = mainDrawerIndex;
                     menuControllers[mainDrawerIndex].toggle();
                   }),
+          toolbarHeight: widget.appBar.toolbarHeight,
           title: widget.appBar.title,
           automaticallyImplyLeading: widget.appBar.automaticallyImplyLeading,
           actions: widget.appBar.actions,
