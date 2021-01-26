@@ -24,7 +24,7 @@ class _DrawerScaleIconState extends State<DrawerScaleIcon> {
           actions: [IconButton(icon: Icon(Icons.add), onPressed: () {})]),
       drawers: [
         SideDrawer(
-          percentage: 0.6,
+          percentage: 0.7,
           menu: menuWithIcon,
           animation: true,
           color: Theme.of(context).primaryColor,

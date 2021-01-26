@@ -5,7 +5,7 @@ version: 1.1.4
 homepage: https://github.com/shiburagi/Drawer-Behavior-Flutter
 
 environment:
-  sdk: ">=2.6.0 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   flutter:

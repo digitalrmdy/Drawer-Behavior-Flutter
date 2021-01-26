@@ -21,6 +21,7 @@ class SideDrawer<T> extends StatefulWidget {
     this.onMenuItemSelected,
     this.color = Colors.white,
     this.background,
+    this.gradient,
     this.animation = false,
     this.direction = Direction.left,
     this.selectorColor,
@@ -97,6 +98,9 @@ class SideDrawer<T> extends StatefulWidget {
 
   /// Background for drawer
   final DecorationImage background;
+
+  /// Background graident for drawer
+  final LinearGradient gradient;
 
   /// Background [Color] for drawer
   final Color color;
@@ -187,7 +191,7 @@ class _SideDrawerState extends State<SideDrawer> with TickerProviderStateMixin {
               textStyle: textStyle,
               menuView: widget,
               width: maxSlideAmount,
-              icon: item.icon == null ? null : Icon(item.icon),
+              icon: item.icon(),
               onTap: onTap,
               drawBorder: !widget.animation,
             )
@@ -307,6 +311,7 @@ class _SideDrawerState extends State<SideDrawer> with TickerProviderStateMixin {
             width: double.infinity,
             height: double.infinity,
             decoration: BoxDecoration(
+              gradient: widget.gradient,
               image: widget.background,
               color: widget.color,
             ),
@@ -563,10 +568,12 @@ class Menu {
   });
 }
 
+typedef IconBuilder = Widget Function();
+
 class MenuItem<T> {
   final T id;
   final String title;
-  final IconData icon;
+  final IconBuilder icon;
 
   MenuItem({
     this.id,
@@ -577,7 +584,7 @@ class MenuItem<T> {
   MenuItem<T> copyWith({
     T id,
     String title,
-    IconData icon,
+    IconBuilder icon,
   }) {
     return MenuItem<T>(
       id: id ?? this.id,
