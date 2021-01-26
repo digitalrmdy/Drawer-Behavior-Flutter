@@ -79,7 +79,7 @@ class SideDrawer<T> extends StatefulWidget {
   final Duration duration;
 
   /// [Menu] for drawer
-  final Menu menu;
+  final Menu<T> menu;
 
   /// Current selected ID
   final T selectedItemId;
@@ -194,7 +194,7 @@ class _SideDrawerState extends State<SideDrawer> with TickerProviderStateMixin {
               textStyle: textStyle,
               menuView: widget,
               width: maxSlideAmount,
-              icon: item.icon(),
+              icon: item.icon?.call(),
               onTap: onTap,
               drawBorder: !widget.animation,
             )
@@ -290,26 +290,6 @@ class _SideDrawerState extends State<SideDrawer> with TickerProviderStateMixin {
     return DrawerScaffoldMenuController(
         direction: widget.direction,
         builder: (BuildContext context, MenuController menuController) {
-          var shouldRenderSelector = true;
-          var actualSelectorYTop = selectorYTop;
-          var actualSelectorYBottom = selectorYBottom;
-          var selectorOpacity = 1.0;
-
-          if (menuController.state == MenuState.closed ||
-              menuController.state == MenuState.closing ||
-              selectorYTop == null) {
-            final RenderBox menuScreenRenderBox =
-                context.findRenderObject() as RenderBox;
-
-            if (menuScreenRenderBox != null) {
-              final menuScreenHeight = menuScreenRenderBox.size.height;
-              actualSelectorYTop = menuScreenHeight - 50.0;
-              actualSelectorYBottom = menuScreenHeight;
-              selectorOpacity = 0.0;
-            } else {
-              shouldRenderSelector = false;
-            }
-          }
 
           return Container(
             // padding: widget.direction == Direction.right
@@ -327,17 +307,6 @@ class _SideDrawerState extends State<SideDrawer> with TickerProviderStateMixin {
               child: Stack(
                 children: [
                   createDrawer(menuController),
-                  widget.animation && shouldRenderSelector
-                      ? ItemSelector(
-                          left: widget.direction == Direction.right
-                              ? MediaQuery.of(context).size.width -
-                                  maxSlideAmount
-                              : 0,
-                          selectorColor: selectorColor,
-                          top: actualSelectorYTop,
-                          bottom: actualSelectorYBottom,
-                          opacity: selectorOpacity)
-                      : Container(),
                 ],
               ),
             ),
@@ -567,8 +536,8 @@ class _MenuListItem extends StatelessWidget {
   }
 }
 
-class Menu {
-  final List<MenuItem> items;
+class Menu<T> {
+  final List<MenuItem<T>> items;
 
   Menu({
     this.items,
