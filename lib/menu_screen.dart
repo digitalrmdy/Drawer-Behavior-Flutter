@@ -10,8 +10,8 @@ enum Direction {
   right,
 }
 
-typedef MenuItemBuilder = Widget Function(BuildContext context, MenuItem item,
-    bool isSelected, double maxSlideAmount);
+typedef MenuItemBuilder<T> = Widget Function(BuildContext context,
+    MenuItem<T> item, bool isSelected, double maxSlideAmount);
 
 class SideDrawer<T> extends StatefulWidget {
   SideDrawer({
@@ -97,7 +97,7 @@ class SideDrawer<T> extends StatefulWidget {
   final Widget footerView;
 
   /// Custom builder for menu item
-  final MenuItemBuilder itemBuilder;
+  final MenuItemBuilder<T> itemBuilder;
 
   /// Background for drawer
   final DecorationImage background;
