@@ -10,8 +10,8 @@ enum Direction {
   right,
 }
 
-typedef MenuItemBuilder<T> = Widget Function(BuildContext context,
-    MenuItem<T> item, bool isSelected, double maxSlideAmount);
+typedef MenuItemBuilder<T> = Widget Function(
+    BuildContext context, MenuItem<T> item, bool isSelected);
 
 class SideDrawer<T> extends StatefulWidget {
   SideDrawer({
@@ -199,16 +199,14 @@ class _SideDrawerState extends State<SideDrawer> with TickerProviderStateMixin {
               onTap: onTap,
               drawBorder: !widget.animation,
             )
-          : InkWell(
+          : Container(
+              alignment: Alignment.centerLeft,
               child: Container(
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  child: widget.itemBuilder(
-                      context, item, isSelected, maxSlideAmount),
-                  width: maxSlideAmount,
-                ),
+                child: InkWell(
+                    onTap: onTap,
+                    child: widget.itemBuilder(context, item, isSelected)),
+                width: maxSlideAmount,
               ),
-              onTap: onTap,
             );
 
       if (widget.animation)
