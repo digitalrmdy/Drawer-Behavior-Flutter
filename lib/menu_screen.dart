@@ -124,6 +124,7 @@ class SideDrawer<T> extends StatefulWidget {
   final Curve scaleUpCurve;
   final Curve slideOutCurve;
   final Curve slideInCurve;
+
   double maxSlideAmount(context) =>
       drawerWidth ?? MediaQuery.of(context).size.width * percentage;
 
@@ -290,7 +291,6 @@ class _SideDrawerState extends State<SideDrawer> with TickerProviderStateMixin {
     return DrawerScaffoldMenuController(
         direction: widget.direction,
         builder: (BuildContext context, MenuController menuController) {
-
           return Container(
             // padding: widget.direction == Direction.right
             //     ? const EdgeInsets.only(left: 24)
