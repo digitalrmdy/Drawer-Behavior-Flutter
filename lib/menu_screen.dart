@@ -10,6 +10,9 @@ enum Direction {
   right,
 }
 
+typedef MenuItemBuilder = Widget Function(BuildContext context, MenuItem item,
+    bool isSelected, double maxSlideAmount);
+
 class SideDrawer<T> extends StatefulWidget {
   SideDrawer({
     this.menu,
@@ -94,7 +97,7 @@ class SideDrawer<T> extends StatefulWidget {
   final Widget footerView;
 
   /// Custom builder for menu item
-  final Function(BuildContext, MenuItem, bool) itemBuilder;
+  final MenuItemBuilder itemBuilder;
 
   /// Background for drawer
   final DecorationImage background;
@@ -199,7 +202,8 @@ class _SideDrawerState extends State<SideDrawer> with TickerProviderStateMixin {
               child: Container(
                 alignment: Alignment.centerLeft,
                 child: Container(
-                  child: widget.itemBuilder(context, item, isSelected),
+                  child: widget.itemBuilder(
+                      context, item, isSelected, maxSlideAmount),
                   width: maxSlideAmount,
                 ),
               ),
@@ -227,13 +231,16 @@ class _SideDrawerState extends State<SideDrawer> with TickerProviderStateMixin {
           left: widget.direction == Direction.left
               ? 0
               : MediaQuery.of(context).size.width - maxSlideAmount),
-      child: SingleChildScrollView(
-        child: Container(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: listItems,
-          ),
+      child: Container(
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ...listItems.take(listItems.length - 1).toList(),
+            Spacer(),
+            listItems.last,
+            Spacer(),
+          ],
         ),
       ),
     );
@@ -401,7 +408,7 @@ class _ItemSelectorState extends AnimatedWidgetBaseState<ItemSelector> {
 }
 
 class AnimatedMenuListItem extends ImplicitlyAnimatedWidget {
-  final _MenuListItem menuListItem;
+  final Widget menuListItem;
   final MenuState menuState;
   final bool isSelected;
   final Duration duration;

@@ -81,7 +81,7 @@ class _DrawerCustomItemState extends State<DrawerCustomItem> {
           color: Theme.of(context).primaryColor,
           selectedItemId: selectedMenuItemId,
           itemBuilder:
-              (BuildContext context, MenuItem menuItem, bool isSelected) {
+              (BuildContext context, MenuItem menuItem, bool isSelected, _) {
             return Container(
               color: isSelected
                   ? Theme.of(context).accentColor.withOpacity(0.7)
