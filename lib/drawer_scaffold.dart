@@ -36,6 +36,7 @@ class DrawerScaffold extends StatefulWidget {
   final bool resizeToAvoidBottomPadding;
   final bool showShadow;
   final Color shadowColor;
+  final double shadowWidth;
 
   /// Listen to offset value on slide event for which [SideDrawer]
   final Function(SideDrawer, double) onSlide;
@@ -75,6 +76,7 @@ class DrawerScaffold extends StatefulWidget {
     this.primary = true,
     this.showShadow = true,
     this.shadowColor,
+    this.shadowWidth = 40.0,
     this.resizeToAvoidBottomInset,
     this.resizeToAvoidBottomPadding,
     this.onSlide,
@@ -467,7 +469,7 @@ class _DrawerScaffoldState<T> extends State<DrawerScaffold>
       return card;
     }
     final shadowColor = widget.shadowColor ?? kDefaultShadowColor;
-    final paddingLeft = 29 * slidePercent;
+    final paddingLeft = widget.shadowWidth * slidePercent;
     return Stack(
       children: [
         //shadow
