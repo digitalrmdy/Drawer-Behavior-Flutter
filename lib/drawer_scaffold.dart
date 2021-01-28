@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,8 @@ class DrawerScaffold extends StatefulWidget {
   final bool primary;
   final bool resizeToAvoidBottomInset;
   final bool resizeToAvoidBottomPadding;
+  final bool showShadow;
+  final Color shadowColor;
 
   /// Listen to offset value on slide event for which [SideDrawer]
   final Function(SideDrawer, double) onSlide;
@@ -70,6 +73,8 @@ class DrawerScaffold extends StatefulWidget {
     this.extendBodyBehindAppBar = false,
     this.persistentFooterButtons,
     this.primary = true,
+    this.showShadow = true,
+    this.shadowColor,
     this.resizeToAvoidBottomInset,
     this.resizeToAvoidBottomPadding,
     this.onSlide,
@@ -105,6 +110,8 @@ class _DrawerScaffoldState<T> extends State<DrawerScaffold>
       0,
       widget.drawers
           .indexWhere((element) => element.direction == widget.mainDrawer));
+
+  static final kDefaultShadowColor = Color(0XFFE5E5E5).withOpacity(0.5);
 
   @override
   void initState() {
@@ -429,21 +436,59 @@ class _DrawerScaffoldState<T> extends State<DrawerScaffold>
 
     double elevation = drawer.elevation * slidePercent;
     return new Transform(
-      transform: perspective,
-      origin: drawer.degree != null
-          ? Offset(MediaQuery.of(context).size.width / 2, 0.0)
-          : drawer.direction == Direction.right
-              ? Offset(MediaQuery.of(context).size.width, 0.0)
-              : null,
-      alignment: Alignment.centerLeft,
-      child: Card(
-        elevation: elevation,
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(cornerRadius)),
-        margin: EdgeInsets.symmetric(horizontal: elevation),
-        child: content,
-      ),
+        transform: perspective,
+        origin: drawer.degree != null
+            ? Offset(MediaQuery.of(context).size.width / 2, 0.0)
+            : drawer.direction == Direction.right
+                ? Offset(MediaQuery.of(context).size.width, 0.0)
+                : null,
+        alignment: Alignment.centerLeft,
+        child: _drawCard(
+            content: content,
+            elevation: elevation,
+            cornerRadius: cornerRadius,
+            slidePercent: slidePercent));
+  }
+
+  Widget _drawCard(
+      {Widget content,
+      double elevation,
+      double cornerRadius,
+      double slidePercent}) {
+    final card = Card(
+      elevation: elevation,
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(cornerRadius)),
+      margin: EdgeInsets.symmetric(horizontal: elevation),
+      child: content,
+    );
+    if (!widget.showShadow) {
+      return card;
+    }
+    final shadowColor = widget.shadowColor ?? kDefaultShadowColor;
+    final paddingLeft = 29 * slidePercent;
+    return Stack(
+      children: [
+        //shadow
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 30),
+          child: Card(
+            elevation: elevation,
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(cornerRadius),
+            ),
+            child: Container(),
+            color: shadowColor,
+          ),
+        ),
+        //content
+        Padding(
+          padding: EdgeInsets.only(left: paddingLeft),
+          child: card,
+        ),
+      ],
     );
   }
 

@@ -236,9 +236,13 @@ class _SideDrawerState extends State<SideDrawer> with TickerProviderStateMixin {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ...listItems.take(listItems.length - 1).toList(),
-            Spacer(),
+            Spacer(
+              flex: 3,
+            ),
             listItems.last,
-            Spacer(),
+            Spacer(
+              flex: 1,
+            ),
           ],
         ),
       ),
